@@ -1,11 +1,18 @@
 FROM python:slim-buster
 WORKDIR /app
 
+all:
+  BUILD +test
+
 deps:
   COPY Pipfile* .
   RUN pip install --upgrade pip
   RUN pip install pipenv
   RUN pipenv install --dev --system
+
+test:
+  FROM +deps
+  RUN coverage run -m pytest && coverage report -m
 
 build-dev-image:
   FROM +deps
