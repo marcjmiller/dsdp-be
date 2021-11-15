@@ -10,6 +10,14 @@ deps:
   RUN pip install pipenv
   RUN pipenv install --dev --system
 
+lint:
+  FROM +deps
+  RUN flake8 --count --show-source --statistics
+
+format:
+  LOCALLY
+  RUN black src/ --diff --color --check
+  
 test:
   FROM +deps
   RUN coverage run -m pytest && coverage report -m
