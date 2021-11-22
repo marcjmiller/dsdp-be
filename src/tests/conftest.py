@@ -1,7 +1,20 @@
 import pytest
+import os
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from minio import Minio
 
+@pytest.fixture(autouse=True)
+def init_minio():
+  c = Minio(
+    "localhost:9000", 
+    "minio", 
+    "minio123",
+    secure=False
+  )
+  if not c.bucket_exists("test"):
+    c.make_bucket("test")
+  yield
 @pytest.fixture
 def app() -> FastAPI:
   from src.main import get_application

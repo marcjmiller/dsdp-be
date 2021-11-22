@@ -25,7 +25,8 @@ format:
   
 test:
   FROM +deps
-  RUN coverage run -m pytest && coverage report -m
+  COPY ./src/ ./
+  RUN pytest
 
 build-dev-image:
   FROM +deps
