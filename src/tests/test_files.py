@@ -14,3 +14,7 @@ class TestFilesRoutes:
     response = client.post(app.url_path_for("files:create"))
     assert response.status_code != HTTP_404_NOT_FOUND
     # TODO: Finish test by adding file and testing if it is there
+
+  def test_download_file(self, app: FastAPI, client: TestClient):
+    response = client.get(app.url_path_for("files:getFile"))
+    assert response.status_code != HTTP_404_NOT_FOUND

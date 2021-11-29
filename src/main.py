@@ -5,9 +5,7 @@ from api.routes.api import router as api_router
 
 def get_application() -> FastAPI:
   application = FastAPI()
-  origins = [
-    "http://localhost:3000"
-  ]
+  origins = ["*"]
 
   application.add_middleware(
     CORSMiddleware,
