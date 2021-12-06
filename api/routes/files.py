@@ -32,3 +32,8 @@ async def create(files: List[UploadFile] = File(...)):
   for file in files:
     results.append(mc.fput_object(BUCKET, file.filename, file.file.fileno()))
   return results
+
+@router.delete("", name="files:delete")
+async def delete(name: str):
+  return mc.remove_object(BUCKET, name)
+
