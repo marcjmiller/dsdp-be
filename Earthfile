@@ -21,16 +21,16 @@ lint:
 
 format:
   LOCALLY
-  RUN black src/ --diff --color --check
+  RUN black ./ --diff --color --check
   
 test:
   FROM +deps
-  COPY ./src/ ./
+  COPY . .
   RUN pytest
 
 build-dev-image:
   FROM +deps
-  COPY ./src/ ./
+  COPY . .
   ENTRYPOINT ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0"]
   SAVE IMAGE backend:dev-build
 

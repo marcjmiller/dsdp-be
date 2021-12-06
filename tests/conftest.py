@@ -17,7 +17,7 @@ def init_minio():
   yield
 @pytest.fixture
 def app() -> FastAPI:
-  from src.main import get_application
+  from backend.main import get_application
   print(get_application())
   return get_application()
 

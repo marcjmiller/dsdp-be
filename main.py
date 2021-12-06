@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# change "api.routes.api" --> ".api.routes.api" for running tests locally 
-from api.routes.api import router as api_router
+from .api.routes.api import router as api_router
 
 
 def get_application() -> FastAPI:
