@@ -1,5 +1,5 @@
 FROM python:3.9-slim-buster
-WORKDIR /backend
+WORKDIR /app
 
 all:
   BUILD +test
@@ -25,13 +25,13 @@ format:
   
 test:
   FROM +deps
-  COPY . .
+  COPY . ./backend
   RUN pytest
 
 build-dev-image:
   FROM +deps
-  COPY . ./
-  ENTRYPOINT ["uvicorn", "main:backend", "--reload", "--host", "0.0.0.0"]
+  COPY . ./backend
+  ENTRYPOINT ["uvicorn", "backend.main:app", "--reload", "--host", "0.0.0.0"]
   SAVE IMAGE backend:dev-build
 
 run-dev:
