@@ -1,7 +1,7 @@
 ## Dependencies
-- [Earthly]()
-- [Docker]()
-- [Docker-compose]()
+- [Earthly](https://earthly.dev/get-earthly)
+- [Docker](https://docs.docker.com/engine/install/)
+- [Docker-compose](https://docs.docker.com/compose/install/)
 
 
 ## To get started with Development
