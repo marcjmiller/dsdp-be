@@ -1,7 +1,6 @@
 from fastapi import APIRouter, UploadFile, File
 from minio import Minio
 from typing import List
-from fastapi.responses import StreamingResponse
 from starlette.responses import FileResponse
 import os
 
@@ -23,7 +22,7 @@ async def download(name: str) -> FileResponse:
   return FileResponse(file._object_name)
 
 @router.get("/list", name="files:list")
-async def list():
+async def list_objects():
   return mc.list_objects("bucket")
 
 @router.post("", name="files:create")

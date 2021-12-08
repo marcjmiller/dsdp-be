@@ -1,18 +1,6 @@
 version: '3.7'
 
 services:
-  api: 
-    image: backend:dev-build
-    ports:
-      - 8080:8000
-    depends_on:
-      - minio
-    environment:
-      MINIO_URL: minio:9000
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
-    volumes:
-      - ./:/app/backend
   minio:
     image: quay.io/minio/minio:RELEASE.2021-11-05T09-16-26Z
     ports:

@@ -2,16 +2,15 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 all:
-  BUILD +test
+  BUILD +integration-test
 
 deps:
   ENV PATH=/home/python3/.local/bin:$PATH
   ENV PYTHONIOENCODING=UTF-8
   ENV PYTHONDONTWRITEBYTECODE=1
   ENV PYTHONUNBUFFERED=1
-  COPY Pipfile* .
+  COPY Pipfile* ./
   RUN pip install --upgrade pip
-  RUN pip install --upgrade wheel
   RUN pip install pipenv
   RUN pipenv install --dev --system
 
@@ -23,10 +22,19 @@ format:
   LOCALLY
   RUN black ./ --diff --color --check
   
-test:
+# unit-test:
+#   FROM +deps
+#   COPY . ./backend
+#   RUN pytest backend/tests/unit/*
+
+integration-test:
   FROM +deps
-  COPY . ./backend
-  RUN pytest
+  COPY main.py __init__.py docker-compose.yml pytest.ini .coveragerc ./backend
+  COPY api ./backend/api
+  COPY tests ./backend/tests
+  WITH DOCKER --compose ./backend/docker-compose.yml
+    RUN pytest backend/tests/*
+  END
 
 build-dev-image:
   FROM +deps

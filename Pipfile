@@ -14,9 +14,12 @@ setuptools = "*"
 [dev-packages]
 black = "*"
 pytest = "*"
-coverage = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+pytest-mock = "*"
 flake8 = "*"
 requests = "*"
+mock = "*"
 
 [requires]
 python_version = "3.9"
