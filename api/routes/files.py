@@ -1,8 +1,8 @@
+import os
+from typing import List
 from fastapi import APIRouter, UploadFile, File
 from minio import Minio
-from typing import List
 from starlette.responses import FileResponse
-import os
 
 router = APIRouter()
 BUCKET = os.getenv("MINIO_BUCKET_NAME") or "bucket"
