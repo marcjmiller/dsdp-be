@@ -1,1 +1,4 @@
-disable=missing-docstring,relative-beyond-top-level,missing-module-docstring,missing-function-docstring
+disable= missing-docstring,
+ relative-beyond-top-level,
+ missing-module-docstring,
+ missing-function-docstring
