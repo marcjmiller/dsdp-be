@@ -16,11 +16,10 @@ deps:
 
 lint:
   FROM +deps
-  RUN flake8 --count --show-source --statistics
-
+  RUN black ./ --diff --color --check
 format:
   LOCALLY
-  RUN black ./ --diff --color --check
+  RUN black .
   
 # unit-test:
 #   FROM +deps
