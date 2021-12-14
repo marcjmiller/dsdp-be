@@ -9,6 +9,6 @@ COPY --chown=python:python  .cache/python-packages ./python-packages
 
 ENV PYTHONPATH=/home/python/python-packages
 
-EXPOSE 8080
+EXPOSE 8000
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]
