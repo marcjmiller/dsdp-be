@@ -6,7 +6,7 @@ from minio import Minio
 
 @pytest.fixture(autouse=True)
 def init_minio():
-    c = Minio("localhost:9000", "minio", "minio123", secure=False)
+    c = Minio("minio:9000", "minio", "minio123", secure=False)
     if not c.bucket_exists("test"):
         c.make_bucket("test")
     yield
