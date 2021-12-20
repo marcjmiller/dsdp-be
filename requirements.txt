@@ -5,7 +5,6 @@
 #    pipenv lock --requirements
 #
 
--i https://pypi.python.org/simple
 anyio==3.4.0
 asgiref==3.4.1
 certifi==2021.10.8
