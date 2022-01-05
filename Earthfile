@@ -32,11 +32,11 @@ format:
 
 integration-test:
   FROM +deps
-  COPY main.py __init__.py docker-compose.yml pytest.ini .coveragerc ./backend
-  COPY api ./backend/api
-  COPY tests ./backend/tests
-  WITH DOCKER --compose ./backend/docker-compose.yml
-    RUN pytest backend/tests/*
+  COPY main.py __init__.py docker-compose.yml pytest.ini .coveragerc ./
+  COPY api api
+  COPY tests tests
+  WITH DOCKER --compose ./docker-compose.yml
+    RUN pytest tests/*
   END
 
 build-dev-image:
