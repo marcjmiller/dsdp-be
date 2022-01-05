@@ -1,5 +1,5 @@
 FROM python:3.9-slim-buster
-WORKDIR /app
+WORKDIR /backend
 
 all:
   BUILD +integration-test
@@ -9,6 +9,7 @@ deps:
   ENV PYTHONIOENCODING=UTF-8
   ENV PYTHONDONTWRITEBYTECODE=1
   ENV PYTHONUNBUFFERED=1
+  ENV PYTHONPATH=/backend
   COPY Pipfile* ./
   RUN pip install --upgrade pip
   RUN pip install pipenv
@@ -23,7 +24,7 @@ lint:
 format:
   LOCALLY
   RUN black .
-  
+
 # unit-test:
 #   FROM +deps
 #   COPY . ./backend
@@ -40,11 +41,11 @@ integration-test:
 
 build-dev-image:
   FROM +deps
-  COPY . ./backend
-  ENTRYPOINT ["uvicorn", "backend.main:app", "--reload", "--host", "0.0.0.0"]
+  COPY . .
+  ENTRYPOINT ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0"]
   SAVE IMAGE backend:dev-build
 
 run-dev:
   LOCALLY
-  RUN earthly +build-dev-image 
+  RUN earthly +build-dev-image
   RUN docker-compose up

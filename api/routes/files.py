@@ -4,7 +4,9 @@ from fastapi import APIRouter, UploadFile, File
 from minio import Minio
 from starlette.responses import FileResponse
 
+
 router = APIRouter()
+
 BUCKET = os.getenv("MINIO_BUCKET_NAME") or "bucket"
 mc = Minio(
     os.getenv("MINIO_URL") or "localhost:9000",
