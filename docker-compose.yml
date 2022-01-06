@@ -1,6 +1,13 @@
 version: '3.7'
 
 services:
+  backend:
+    build: .
+    ports:
+      - 8000:8000
+    environment:
+      MINIO_URL: minio:9000
+      
   minio:
     image: quay.io/minio/minio:RELEASE.2021-11-05T09-16-26Z
     ports:

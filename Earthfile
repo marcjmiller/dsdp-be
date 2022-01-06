@@ -13,7 +13,6 @@ deps:
   COPY Pipfile* ./
   RUN pip install --upgrade pip
   RUN pip install pipenv
-  RUN pip install pylint
   RUN pipenv install --dev --system
 
 lint:
