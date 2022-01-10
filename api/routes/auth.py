@@ -9,9 +9,10 @@ router = APIRouter()
 def user_roles(authorization: Optional[str] = Header(None)):
     try:
         encoded_token = authorization.split(" ")[1]
-        pk = "keycloakPublicKey"
-        audience = "someString" # whatever the name of the client used for the app is, ex: "il19_00eb8094-2f88-4c98-ad87-dsdp"
-        decoded_token = jwt.decode(encoded_token, pk, audience, algorithms=["RS256"])
+        pub_key = "keycloakPublicKey"
+        client_id = "someString"
+        algorithm = ["RS256"]
+        decoded_token = jwt.decode(encoded_token, pub_key, client_id, algorithm)
 
         user = {
           "name": decoded_token["name"],
@@ -20,7 +21,7 @@ def user_roles(authorization: Optional[str] = Header(None)):
           "cac": decoded_token["activecac"],
           "groups": decoded_token["group-simple"]
         }
-    except:
+    except AttributeError:
         return None
 
     return user
