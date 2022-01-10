@@ -8,8 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 COPY --chown=python:python  Pipfile* ./
-RUN pip install pipenv
-RUN pipenv install --system
+RUN pip install pipenv==2021.11.23 && pipenv install --system
 
 COPY --chown=python:python  main.py ./
 COPY --chown=python:python  __init__.py ./

@@ -10,6 +10,7 @@ python-multipart = "*"
 uvicorn = "*"
 wheel = "*"
 setuptools = "*"
+pyjwt = "*"
 
 [dev-packages]
 black = "*"
