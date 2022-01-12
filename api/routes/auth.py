@@ -2,7 +2,8 @@ from typing import Optional
 from fastapi import APIRouter, Header
 from jwt import DecodeError
 
-import jwt, requests
+import jwt
+import requests
 
 router = APIRouter()
 
@@ -34,7 +35,7 @@ def user_roles(authorization: Optional[str] = Header(None)):
     except DecodeError:
         print(f"Decode error, Auth: {authorization}, Key {pub_key}, Audience: {client_id}")
         return {"Message": "Decode Error, see container logs"}
-    except:
-        print(f"Auth:{authorization},\n Public Key: {pub_key},\n Client ID: {client_id}")
-        return {"Message": "Error, see container logs"}
+    except Exception as exception:
+        print(f"Auth:{authorization},\n Public Key: {pub_key},\n Client ID: {client_id}, Exception: {exception}")
+        raise exception
     return user
