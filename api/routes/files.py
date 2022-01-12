@@ -11,12 +11,16 @@ BUCKET = os.getenv("MINIO_BUCKET_NAME") or "bucket"
 MINIO_HOST = os.getenv("MINIO_HOST") or "localhost"
 MINIO_PORT = os.getenv("MINIO_PORT") or "9000"
 MINIO_URL = os.getenv("MINIO_URL") or f"{MINIO_HOST}:{MINIO_PORT}"
+MINIO_REGION = os.getenv("MINIO_REGION") or ""
+MINIO_ACCESS_KEY=os.getenv("MINIO_ACCESS_KEY") or "minio"
+MINIO_SECRET_KEY=os.getenv("MINIO_SECRET_KEY") or "minio123"
 
 try:
     mc = Minio(
         MINIO_URL,
-        os.getenv("MINIO_ACCESS_KEY") or "minio",
-        os.getenv("MINIO_SECRET_KEY") or "minio123",
+        MINIO_ACCESS_KEY,
+        MINIO_SECRET_KEY,
+        region=MINIO_REGION,
         secure=False,
     )
 
