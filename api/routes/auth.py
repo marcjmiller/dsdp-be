@@ -7,6 +7,7 @@ import requests
 
 router = APIRouter()
 
+
 @router.get("/user/roles", name="auth:getUserRoles")
 def user_roles(authorization: Optional[str] = Header(None)):
     pub_key = ""
@@ -20,11 +21,11 @@ def user_roles(authorization: Optional[str] = Header(None)):
         decoded_token = jwt.decode(encoded_token, pub_key, client_id, algorithm)
 
         user = {
-          "name": decoded_token["name"],
-          "username": decoded_token["preferred_username"],
-          "email": decoded_token["email"],
-          "cac": decoded_token["activecac"],
-          "groups": decoded_token["group-simple"]
+            "name": decoded_token["name"],
+            "username": decoded_token["preferred_username"],
+            "email": decoded_token["email"],
+            "cac": decoded_token["activecac"],
+            "groups": decoded_token["group-simple"],
         }
     except AttributeError:
         print(f"Attribute error, Auth: {authorization}")
@@ -33,9 +34,13 @@ def user_roles(authorization: Optional[str] = Header(None)):
         print(f"Key error, \nPubKey: {pub_key} \nAuth: {authorization}")
         return {"Message:": "Invalid KEYCLOAK_PUBLIC_KEY, see container logs"}
     except DecodeError:
-        print(f"Decode error, Auth: {authorization}, Key {pub_key}, Audience: {client_id}")
+        print(
+            f"Decode error, Auth: {authorization}, Key {pub_key}, Audience: {client_id}"
+        )
         return {"Message": "Decode Error, see container logs"}
     except Exception as exception:
-        print(f"Auth:{authorization},\n Public Key: {pub_key},\n Client ID: {client_id}, Exception: {exception}")
+        print(
+            f"Auth:{authorization}, Key: {pub_key}, Client ID: {client_id}, Except: {exception}"
+        )
         raise exception
     return user

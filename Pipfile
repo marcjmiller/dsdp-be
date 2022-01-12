@@ -11,6 +11,7 @@ uvicorn = "*"
 wheel = "*"
 setuptools = "*"
 pyjwt = "*"
+requests = "*"
 
 [dev-packages]
 black = "*"
@@ -19,7 +20,6 @@ pytest-asyncio = "*"
 pytest-cov = "*"
 pytest-mock = "*"
 flake8 = "*"
-requests = "*"
 mock = "*"
 
 [requires]
