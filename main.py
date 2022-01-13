@@ -16,6 +16,7 @@ def get_application() -> FastAPI:
     )
 
     application.include_router(api_router, prefix="/api")
+    application.include_router(api_router, prefix="/backend")
     return application
 
 
