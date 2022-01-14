@@ -12,6 +12,7 @@ wheel = "*"
 setuptools = "*"
 pyjwt = "*"
 requests = "*"
+cryptography = "*"
 
 [dev-packages]
 black = "*"
