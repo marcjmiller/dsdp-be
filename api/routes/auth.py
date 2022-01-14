@@ -14,23 +14,18 @@ def user_roles(authorization: Optional[str] = Header(None)):
     client_id = ""
     try:
         encoded_token = authorization.split(" ")[1]
-        print("Got encoded token")
         baby_yoda = requests.get("https://login.dso.mil/auth/realms/baby-yoda/").json()
-        print("got baby yoda info")
         pub_key = f"-----BEGIN PUBLIC KEY-----\n{baby_yoda['public_key']}\n-----END PUBLIC KEY-----"
-        print("got pub key")
         client_id = "il2_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_mission-staging"
-        algorithm = ["RS256"]
-        print("about to try decoding")
-        decoded_token = jwt.decode(encoded_token, pub_key, client_id, algorithm)
+        decoded_token = jwt.decode(encoded_token, pub_key, audience=client_id, algorithms=["RS256"])
 
-        print("attempting to create user")
         user = {
             "name": decoded_token["name"],
             "username": decoded_token["preferred_username"],
             "email": decoded_token["email"],
             "cac": decoded_token["activecac"],
-            "groups": decoded_token["group-simple"],
+            "groups": decoded_token["group-full"],
+            "isAdmin": "/Product-Teams/Dsdp/Admin" in decoded_token["group-full"]
         }
     except AttributeError:
         print(f"Attribute error, Auth: {authorization}")
