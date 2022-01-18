@@ -8,17 +8,17 @@ from starlette.responses import FileResponse
 router = APIRouter()
 
 MINIO_BUCKET = os.getenv("MINIO_BUCKET_NAME", "bucket")
-# MINIO_HOST = os.getenv("MINIO_HOST", "localhost")
-# MINIO_PORT = os.getenv("MINIO_PORT", "9000")
+MINIO_HOST = os.getenv("MINIO_HOST", "localhost")
+MINIO_PORT = os.getenv("MINIO_PORT", "9000")
 MINIO_PROTOCOL = os.getenv("MINIO_PROTOCOL", "http")
-MINIO_URL = os.getenv("MINIO_ENDPOINT_URL", f"{MINIO_PROTOCOL}://localhost:9000")
+MINIO_URL = f"{MINIO_HOST}:{MINIO_PORT}"
 MINIO_REGION = os.getenv("MINIO_REGION")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minio")
 MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minio123")
 
 try:
     print(
-        f"URL: {MINIO_URL}, Bucket: {MINIO_BUCKET}, Region: {MINIO_REGION}, {os.getenv('MINIO_ENDPOINT_URL')}"
+        f"URL: {MINIO_URL}, Bucket: {MINIO_BUCKET}, Region: {MINIO_REGION}, {MINIO_PROTOCOL == 'https'}"
     )
 
     mc = Minio(
@@ -26,7 +26,7 @@ try:
         MINIO_ACCESS_KEY,
         MINIO_SECRET_KEY,
         region=MINIO_REGION,
-        secure=MINIO_PROTOCOL == "https"
+        secure=MINIO_PROTOCOL == "https",
     )
 
     if not mc.bucket_exists(MINIO_BUCKET):
