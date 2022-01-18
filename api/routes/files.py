@@ -7,15 +7,19 @@ from starlette.responses import FileResponse
 
 router = APIRouter()
 
-MINIO_BUCKET = os.getenv("MINIO_BUCKET_NAME") or "bucket"
-MINIO_HOST = os.getenv("MINIO_HOST") or "localhost"
-MINIO_PORT = os.getenv("MINIO_PORT") or "9000"
-MINIO_URL = os.getenv("MINIO_URL") or f"{MINIO_HOST}:{MINIO_PORT}"
-MINIO_REGION = os.getenv("MINIO_REGION") or ""
-MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY") or "minio"
-MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY") or "minio123"
+MINIO_BUCKET = os.getenv("MINIO_BUCKET_NAME", "bucket")
+MINIO_HOST = os.getenv("MINIO_HOST", "localhost")
+MINIO_PORT = os.getenv("MINIO_PORT", "9000")
+MINIO_URL = os.getenv("MINIO_URL", f"{MINIO_HOST}:{MINIO_PORT}")
+MINIO_REGION = os.getenv("MINIO_REGION")
+MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minio")
+MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minio123")
 
 try:
+    print(
+        f"URL: {MINIO_URL}, Bucket: {MINIO_BUCKET}, Region: {MINIO_REGION}, {os.getenv('MINIO_BUCKET_NAME')}"
+    )
+
     mc = Minio(
         MINIO_URL,
         MINIO_ACCESS_KEY,
@@ -39,11 +43,7 @@ async def download(name: str) -> FileResponse:
 
 @router.get("/list", name="files:list")
 async def list_objects():
-    try:
-        return mc.list_objects("bucket")
-    except Exception as exception:
-        print(f"URL: {MINIO_URL}, Bucket: {MINIO_BUCKET}, Region: {MINIO_REGION}, Err: {exception}")
-        return []
+    return mc.list_objects("bucket")
 
 
 @router.post("", name="files:create")
