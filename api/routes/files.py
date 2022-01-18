@@ -16,24 +16,16 @@ MINIO_REGION = os.getenv("MINIO_REGION")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minio")
 MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minio123")
 
-try:
-    print(
-        f"URL: {MINIO_URL}, Bucket: {MINIO_BUCKET}, Region: {MINIO_REGION}, {MINIO_PROTOCOL == 'https'}"
-    )
+mc = Minio(
+    MINIO_URL,
+    MINIO_ACCESS_KEY,
+    MINIO_SECRET_KEY,
+    region=MINIO_REGION,
+    secure=MINIO_PROTOCOL == "https",
+)
 
-    mc = Minio(
-        MINIO_URL,
-        MINIO_ACCESS_KEY,
-        MINIO_SECRET_KEY,
-        region=MINIO_REGION,
-        secure=MINIO_PROTOCOL == "https",
-    )
-
-    if not mc.bucket_exists(MINIO_BUCKET):
-        mc.make_bucket(MINIO_BUCKET)
-except Exception as exception:
-    print(f"Bucket: {MINIO_BUCKET}, \nMinio_URL: {MINIO_URL}, \nException: {exception}")
-    raise exception
+if not mc.bucket_exists(MINIO_BUCKET):
+    mc.make_bucket(MINIO_BUCKET)
 
 
 @router.get("", name="files:getFile")
