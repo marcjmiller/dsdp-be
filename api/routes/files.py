@@ -7,13 +7,13 @@ from starlette.responses import FileResponse
 
 router = APIRouter()
 
-BUCKET = os.getenv("MINIO_BUCKET_NAME") or "bucket"
+MINIO_BUCKET = os.getenv("MINIO_BUCKET_NAME") or "bucket"
 MINIO_HOST = os.getenv("MINIO_HOST") or "localhost"
 MINIO_PORT = os.getenv("MINIO_PORT") or "9000"
 MINIO_URL = os.getenv("MINIO_URL") or f"{MINIO_HOST}:{MINIO_PORT}"
 MINIO_REGION = os.getenv("MINIO_REGION") or ""
-MINIO_ACCESS_KEY=os.getenv("MINIO_ACCESS_KEY") or "minio"
-MINIO_SECRET_KEY=os.getenv("MINIO_SECRET_KEY") or "minio123"
+MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY") or "minio"
+MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY") or "minio123"
 
 try:
     mc = Minio(
@@ -24,31 +24,36 @@ try:
         secure=False,
     )
 
-    if not mc.bucket_exists(BUCKET):
-        mc.make_bucket(BUCKET)
+    if not mc.bucket_exists(MINIO_BUCKET):
+        mc.make_bucket(MINIO_BUCKET)
 except Exception as exception:
-    print(f"Bucket: {BUCKET}, \nMinio_URL: {MINIO_URL}, \nException: {exception}")
+    print(f"Bucket: {MINIO_BUCKET}, \nMinio_URL: {MINIO_URL}, \nException: {exception}")
     raise exception
+
 
 @router.get("", name="files:getFile")
 async def download(name: str) -> FileResponse:
-    file = mc.fget_object(BUCKET, name, name)
+    file = mc.fget_object(MINIO_BUCKET, name, name)
     return FileResponse(file._object_name)
 
 
 @router.get("/list", name="files:list")
 async def list_objects():
-    return mc.list_objects("bucket")
+    try:
+        return mc.list_objects("bucket")
+    except Exception as exception:
+        print(f"URL: {MINIO_URL}, Bucket: {MINIO_BUCKET}, Region: {MINIO_REGION}, Err: {exception}")
+        return []
 
 
 @router.post("", name="files:create")
 async def create(files: List[UploadFile] = File(...)):
     results = []
     for file in files:
-        results.append(mc.fput_object(BUCKET, file.filename, file.file.fileno()))
+        results.append(mc.fput_object(MINIO_BUCKET, file.filename, file.file.fileno()))
     return results
 
 
 @router.delete("", name="files:delete")
 async def delete(name: str):
-    return mc.remove_object(BUCKET, name)
+    return mc.remove_object(MINIO_BUCKET, name)
