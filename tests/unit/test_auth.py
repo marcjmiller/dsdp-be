@@ -24,5 +24,5 @@ def test_auth(mocker):
     baby_yoda = requests.get("https://login.dso.mil/auth/realms/baby-yoda/").json()
     pub_key = f"-----BEGIN PUBLIC KEY-----\n{baby_yoda['public_key']}\n-----END PUBLIC KEY-----"
     user_obj = user_roles("bearer fakebearertoken")
-    mock.assert_called_with('fakebearertoken', pub_key, audience='il2_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_mission-staging', algorithms=['RS256'])
+    mock.assert_called_with('fakebearertoken', options={'verify_signature': False})
     assert user_obj==expected_user_obj
