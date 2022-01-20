@@ -1,8 +1,7 @@
 from typing import Optional
 from fastapi import APIRouter, Header
-from jwt import DecodeError
+from jwt import DecodeError, decode
 
-import jwt
 import requests
 
 router = APIRouter()
@@ -17,7 +16,7 @@ def user_roles(authorization: Optional[str] = Header(None)):
         baby_yoda = requests.get("https://login.dso.mil/auth/realms/baby-yoda/").json()
         pub_key = f"-----BEGIN PUBLIC KEY-----\n{baby_yoda['public_key']}\n-----END PUBLIC KEY-----"
         client_id = "il2_00eb8904-5b88-4c68-ad67-cec0d2e07aa6_mission-staging"
-        decoded_token = jwt.decode(encoded_token, pub_key, audience=client_id, algorithms=["RS256"])
+        decoded_token = decode(encoded_token, pub_key, audience=client_id, algorithms=["RS256"])
 
         user = {
             "name": decoded_token["name"],
