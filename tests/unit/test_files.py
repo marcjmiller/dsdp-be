@@ -1,7 +1,6 @@
 import pytest
 from fastapi import UploadFile
-from backend.api.routes.files import download, list_objects, create, delete
-from starlette.responses import FileResponse
+from api.routes.files import download, list_objects, create, delete
 from mock import MagicMock
 
 BUCKET = "bucket"
@@ -10,9 +9,9 @@ BUCKET = "bucket"
 @pytest.mark.asyncio
 async def test_download(mocker):
     expected = "test"
-    mock = mocker.patch("backend.api.routes.files.Minio.fget_object", MagicMock())
+    mock = mocker.patch("backend.api.routes.files.Minio.presigned_get_object", MagicMock())
     await download("test")
-    mock.assert_called_with(BUCKET, expected, expected)
+    mock.assert_called_with(BUCKET, expected)
 
 
 @pytest.mark.asyncio
