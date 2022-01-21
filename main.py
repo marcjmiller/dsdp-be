@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.routes.api import router as api_router
+import logger  # pylint: disable=unused-import
 
 
 def get_application() -> FastAPI:

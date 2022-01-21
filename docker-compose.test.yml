@@ -1,35 +1,8 @@
 version: "3.7"
 
 services:
-  prod:
-    image: backend:prod-build
-    profiles:
-      - prod
-    ports:
-      - 8000:8000
-    environment:
-      MINIO_HOST: minio
-      LOG_LEVEL: debug
-    volumes:
-      - .:/home/python
-  backend:
-    image: backend:dev-build
-    profiles:
-      - dev
-    ports:
-      - 8000:8000
-    environment:
-      MINIO_HOST: minio
-      LOG_LEVEL: debug
-    volumes:
-      - .:/home/python
-
   minio:
     image: quay.io/minio/minio:RELEASE.2021-11-05T09-16-26Z
-    profiles:
-      - dev
-      - prod
-      - test
     ports:
       - 9000:9000
       - 9001:9001

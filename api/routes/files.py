@@ -1,11 +1,11 @@
 import os
+import logging
 from typing import List
 from fastapi import APIRouter, UploadFile, File
 from fastapi.responses import RedirectResponse
 from minio import Minio
 
-
-router = APIRouter()
+files_router = APIRouter()
 
 MINIO_BUCKET = os.getenv("MINIO_BUCKET_NAME", "bucket")
 MINIO_HOST = os.getenv("MINIO_HOST", "localhost")
@@ -28,16 +28,17 @@ if not mc.bucket_exists(MINIO_BUCKET):
     mc.make_bucket(MINIO_BUCKET)
 
 
-@router.get("", name="files:getFileURL", response_class=RedirectResponse)
+@files_router.get("", name="files:getFileURL", response_class=RedirectResponse)
 async def download(name: str) -> RedirectResponse:
     return mc.presigned_get_object(MINIO_BUCKET, name)
 
-@router.get("/list", name="files:list")
+
+@files_router.get("/list", name="files:list")
 async def list_objects():
     return mc.list_objects(MINIO_BUCKET)
 
 
-@router.post("", name="files:create")
+@files_router.post("", name="files:create")
 async def create(files: List[UploadFile] = File(...)):
     results = []
     for file in files:
@@ -45,6 +46,6 @@ async def create(files: List[UploadFile] = File(...)):
     return results
 
 
-@router.delete("", name="files:delete")
+@files_router.delete("", name="files:delete")
 async def delete(name: str):
     return mc.remove_object(MINIO_BUCKET, name)

@@ -1,40 +1,24 @@
+import logging
 from typing import Optional
 from fastapi import APIRouter, Header
 from jwt import DecodeError, decode
+from api.models.user_info import UserInfo
 
-router = APIRouter()
+auth_router = APIRouter()
 
 
-@router.get("/user/roles", name="auth:getUserRoles")
-def user_roles(authorization: Optional[str] = Header(None)):
-    pub_key = ""
-    client_id = ""
+@auth_router.get("/whoami", name="auth:getUserRoles")
+def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
+    if authorization is None:
+        return {}
+
     try:
         encoded_token = authorization.split(" ")[1]
-        decoded_token = decode(encoded_token, options={"verify_signature": False})
+        user_info = UserInfo(
+            **decode(encoded_token, options={"verify_signature": False})
+        )
 
-        user = {
-            "name": decoded_token["name"],
-            "username": decoded_token["preferred_username"],
-            "email": decoded_token["email"],
-            "cac": decoded_token["activecac"],
-            "groups": decoded_token["group-full"],
-            "isAdmin": "/Product-Teams/Dsdp/Admin" in decoded_token["group-full"]
-        }
-    except AttributeError:
-        print(f"Attribute error, Auth: {authorization}")
-        return {"Message": "Attribute Error, see container logs"}
-    except KeyError:
-        print(f"Key error, \nPubKey: {pub_key} \nAuth: {authorization}")
-        return {"Message:": "Invalid KEYCLOAK_PUBLIC_KEY, see container logs"}
-    except DecodeError:
-        print(
-            f"Decode error, Auth: {authorization}, Key {pub_key}, Audience: {client_id}"
-        )
-        return {"Message": "Decode Error, see container logs"}
-    except Exception as exception:
-        print(
-            f"Auth:{authorization}, Key: {pub_key}, Client ID: {client_id}, Except: {exception}"
-        )
+    except (DecodeError, Exception) as exception:
+        logging.info(f"{exception}, Auth:{authorization}")
         raise exception
-    return user
+    return user_info
