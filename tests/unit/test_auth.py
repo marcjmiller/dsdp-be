@@ -7,12 +7,12 @@ JWT_STUB = {
     "preferred_username": "user.name",
     "email": "useremail",
     "activecac": "",
-    "group-full": ["Products-Teams/Dsdp", "/Product-Teams/Dsdp/Admin"],
+    "group-full": ["Products-Teams/Dsdp", "/Product-Teams/Dsdp/Admin", "/Platform One/gvsc/IL2/roles/admin"],
 }
 
 
 def test_auth(mocker):
-    expected_user_obj = UserInfo(name="user name")
+    expected_user_obj = UserInfo(name="user name", is_admin=True)
     mock = mocker.patch("api.routes.auth.decode", MagicMock())
     mock.return_value = JWT_STUB
 

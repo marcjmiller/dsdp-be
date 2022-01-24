@@ -15,9 +15,9 @@ def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
     try:
         encoded_token = authorization.split(" ")[1]
         decoded = decode(encoded_token, options={"verify_signature": False})
-        logging.info(f"encoded: {encoded_token}, decoded: {decoded}")
         user_info = UserInfo(
-            **decoded
+            **decoded, 
+            is_admin=("/Platform One/gvsc/IL2/roles/admin" in decoded['group-full'])
         )
 
     except (DecodeError, Exception) as exception:
