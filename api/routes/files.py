@@ -1,9 +1,9 @@
 import os
-import logging
 from typing import List
 from fastapi import APIRouter, UploadFile, File
 from fastapi.responses import RedirectResponse
 from minio import Minio
+from starlette.responses import FileResponse
 
 files_router = APIRouter()
 
@@ -26,6 +26,12 @@ mc = Minio(
 
 if not mc.bucket_exists(MINIO_BUCKET):
     mc.make_bucket(MINIO_BUCKET)
+
+
+@files_router.get("/get", name="files:getFile")
+async def download(name: str) -> FileResponse:
+    file = mc.fget_object(MINIO_BUCKET, name, name)
+    return FileResponse(file._object_name)
 
 
 @files_router.get("", name="files:getFileURL", response_class=RedirectResponse)
