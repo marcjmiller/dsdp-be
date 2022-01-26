@@ -5,7 +5,6 @@ from fastapi import APIRouter, UploadFile, File
 from fastapi.responses import RedirectResponse
 from minio import Minio
 from starlette.responses import StreamingResponse
-from boto3 import client
 
 files_router = APIRouter()
 
@@ -18,25 +17,6 @@ MINIO_REGION = os.getenv("MINIO_REGION")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minio")
 MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minio123")
 
-def get_s3_client():
-    if MINIO_ACCESS_KEY == "minio":
-        return client(
-            "s3",
-            endpoint_url=f"{MINIO_PROTOCOL}://{MINIO_URL}",
-            region_name=MINIO_REGION,
-            aws_access_key_id=MINIO_ACCESS_KEY,
-            aws_secret_access_key=MINIO_SECRET_KEY
-        )
-    else:
-        return client(
-            "s3",
-            region_name=MINIO_REGION,
-            aws_access_key_id=MINIO_ACCESS_KEY,
-            aws_secret_access_key=MINIO_SECRET_KEY
-        )
-
-s3 = get_s3_client()
-
 mc = Minio(
     MINIO_URL,
     MINIO_ACCESS_KEY,
@@ -48,19 +28,10 @@ mc = Minio(
 if not mc.bucket_exists(MINIO_BUCKET):
     mc.make_bucket(MINIO_BUCKET)
 
-
 @files_router.get("", name="files:getFile")
 async def download(name: str) -> StreamingResponse:
     file = mc.get_object(MINIO_BUCKET, name)
     return StreamingResponse(file)
-
-
-@files_router.get("/get", name="files:getFileURL", response_class=RedirectResponse)
-async def download(name: str) -> RedirectResponse:
-    return s3.generate_presigned_url('get_object',
-                                     Params={'Bucket': MINIO_BUCKET,
-                                             'Key': name})
-
 
 @files_router.get("/list", name="files:list")
 async def list_objects():
