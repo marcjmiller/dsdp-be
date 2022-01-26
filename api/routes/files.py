@@ -18,9 +18,8 @@ MINIO_REGION = os.getenv("MINIO_REGION")
 MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minio")
 MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minio123")
 
-
 def get_s3_client():
-    if os.getenv("MINIO_SECRET_KEY", "minio123"):
+    if MINIO_ACCESS_KEY == "minio":
         return client(
             "s3",
             endpoint_url=f"{MINIO_PROTOCOL}://{MINIO_URL}",
