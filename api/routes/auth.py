@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 from fastapi import APIRouter, Header
-from jwt import DecodeError, decode
+from jwt import decode
 from api.models.user_info import UserInfo
 
 auth_router = APIRouter()
