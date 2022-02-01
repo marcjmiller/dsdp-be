@@ -10,7 +10,7 @@ auth_router = APIRouter()
 @auth_router.get("/whoami", name="auth:getUserRoles")
 def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
     if authorization is None:
-        return {}
+        return UserInfo(name="Nobody",is_admin=False)
 
     try:
         encoded_token = authorization.split(" ")[1]
