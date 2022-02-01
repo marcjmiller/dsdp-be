@@ -9,9 +9,9 @@ BUCKET = "bucket"
 @pytest.mark.asyncio
 async def test_download(mocker):
     expected = "test"
-    mock = mocker.patch("api.routes.files.Minio.presigned_get_object", MagicMock())
+    mock = mocker.patch("api.routes.files.Minio.fget_object", MagicMock())
     await download("test")
-    mock.assert_called_with(BUCKET, expected)
+    mock.assert_called_with(BUCKET, expected, expected)
 
 
 @pytest.mark.asyncio
