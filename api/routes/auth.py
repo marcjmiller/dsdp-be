@@ -19,7 +19,7 @@ def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
             **decoded,
             is_admin=("/Platform One/gvsc/IL2/roles/admin" in decoded['group-full'])
         )
-    except (DecodeError, Exception) as exception:
+    except Exception as exception:
         logging.info("Auth: %s\n Except: %s", authorization, exception)
         raise exception
     return user_info
