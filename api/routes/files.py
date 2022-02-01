@@ -28,10 +28,10 @@ mc = Minio(
 if not mc.bucket_exists(MINIO_BUCKET):
     mc.make_bucket(MINIO_BUCKET)
 
-@files_router.get("", name="files:getFile")
-async def download(name: str) -> StreamingResponse:
-    file = mc.get_object(MINIO_BUCKET, name)
-    return StreamingResponse(file)
+@files_router.get("", name="files:getFile", response_class=FileResponse)
+async def download(name: str) -> FileResponse:
+    return mc.fget_object(MINIO_BUCKET, name, name)._object_name
+
 
 @files_router.get("/list", name="files:list")
 async def list_objects():
@@ -40,10 +40,8 @@ async def list_objects():
 
 @files_router.post("", name="files:create")
 async def create(files: List[UploadFile] = File(...)):
-    results = []
-    for file in files:
-        results.append(mc.fput_object(MINIO_BUCKET, file.filename, file.file.fileno()))
-    return results
+    logging.info("backend log")
+    return mc.fput_object(MINIO_BUCKET, files[0].filename, files[0].file.fileno())
 
 
 @files_router.delete("", name="files:delete")
