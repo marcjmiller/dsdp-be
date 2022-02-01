@@ -2,9 +2,8 @@ import os
 import logging
 from typing import List
 from fastapi import APIRouter, UploadFile, File
-from fastapi.responses import RedirectResponse
 from minio import Minio
-from starlette.responses import StreamingResponse
+from starlette.responses import FileResponse
 
 files_router = APIRouter()
 
