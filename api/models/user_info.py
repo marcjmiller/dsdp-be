@@ -21,6 +21,8 @@ class UserInfo(BaseModel):
         Attributes
         ----------
         allow_population_by_field_name : bool
-            whether the class may have the fields populated by the fields name in addition to it's alias
+            whether the class may have the fields 
+            populated by the fields name in addition 
+            to it's alias
         """
         allow_population_by_field_name=True
