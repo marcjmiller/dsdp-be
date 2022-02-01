@@ -14,7 +14,7 @@ class TestFilesRoutes:
         assert response.status_code != HTTP_404_NOT_FOUND
 
     def test_download_file(self, app: FastAPI, client: TestClient):
-        response = client.get(app.url_path_for("files:getFileURL"))
+        response = client.get(app.url_path_for("files:getFile"))
         assert response.status_code != HTTP_404_NOT_FOUND
 
     def test_delete_file(self, app: FastAPI, client: TestClient):
