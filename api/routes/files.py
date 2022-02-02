@@ -40,7 +40,8 @@ async def list_objects():
 @files_router.post("", name="files:create")
 async def create(files: List[UploadFile] = File(...)):
     logging.info("backend log")
-    return mc.fput_object(MINIO_BUCKET, files[0].filename, files[0].file.fileno())
+    part_size = 4 * 1024 * 1024 # 4096000 Bytes or 4 MegaBytes
+    return mc.fput_object(MINIO_BUCKET, files[0].filename, files[0].file.fileno(), part_size=part_size)
 
 
 @files_router.delete("", name="files:delete")
