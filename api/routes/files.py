@@ -1,11 +1,14 @@
-import os
 import logging
-from fastapi import APIRouter, UploadFile
-from starlette.responses import StreamingResponse, Response
+import os
+
 import boto3
 from botocore.exceptions import ClientError
+from fastapi import APIRouter, UploadFile
+from starlette.responses import StreamingResponse
 
 files_router = APIRouter()
+
+CHUNK_SIZE = 64 * 1024 * 1024
 
 MINIO_BUCKET = os.getenv("MINIO_BUCKET_NAME", "bucket")
 MINIO_HOST = os.getenv("MINIO_HOST", "localhost")
@@ -34,15 +37,14 @@ def bucket_exists(bucket_name: str) -> bool:
 
 
 if not bucket_exists(MINIO_BUCKET):
-    logging.info('creating bucket %s', MINIO_BUCKET)
     s3.create_bucket(Bucket=MINIO_BUCKET)
 
 
-@files_router.get("", name="files:getFile", response_class=StreamingResponse)
-async def download(name: str) -> StreamingResponse:
-    logging.info(s3.get_object(Bucket=MINIO_BUCKET, Key=name)['Body'].iter_chunks(8096))
-    res = Response(content=s3.get_object(Bucket=MINIO_BUCKET, Key=name)['Body'].iter_chunks(8096))
-    return res
+@files_router.get("", name="files:getFile")
+async def download(name: str):
+    return StreamingResponse(
+        s3.get_object(Bucket=MINIO_BUCKET, Key=name)["Body"].iter_chunks(CHUNK_SIZE)
+    )
 
 
 @files_router.get("/list", name="files:list")
@@ -68,4 +70,3 @@ async def delete(name: str):
         logging.error(e)
         return False
     return True
-
