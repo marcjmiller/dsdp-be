@@ -30,8 +30,8 @@ s3 = boto3.client(
 def bucket_exists(bucket_name: str) -> bool:
     try:
         s3.head_bucket(Bucket=bucket_name)
-    except ClientError as e:
-        logging.error(e)
+    except ClientError as error:
+        logging.error(error)
         return False
     return True
 
@@ -56,8 +56,8 @@ async def list_objects():
 async def create(file: UploadFile) -> bool:
     try:
         s3.upload_fileobj(Fileobj=file.file, Bucket=MINIO_BUCKET, Key=file.filename)
-    except ClientError as e:
-        logging.error(e)
+    except ClientError as error:
+        logging.error(error)
         return False
     return True
 
@@ -66,7 +66,7 @@ async def create(file: UploadFile) -> bool:
 async def delete(name: str):
     try:
         s3.delete_object(Bucket=MINIO_BUCKET, Key=name)
-    except ClientError as e:
-        logging.error(e)
+    except ClientError as error:
+        logging.error(error)
         return False
     return True
