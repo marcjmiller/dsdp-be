@@ -3,6 +3,8 @@ asgiref==3.5.0
 astroid==2.6.6
 attrs==21.4.0
 black==21.12b0
+boto3==1.20.47
+botocore==1.23.47
 certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.10
@@ -15,6 +17,7 @@ h11==0.13.0
 idna==3.3
 iniconfig==1.1.1
 isort==5.10.1
+jmespath==0.10.0
 lazy-object-proxy==1.7.1
 mccabe==0.6.1
 mock==4.0.3
@@ -35,9 +38,11 @@ pytest-asyncio==0.17.2
 pytest-cov==3.0.0
 pytest-mock==3.6.1
 pytest==7.0.0rc1
+python-dateutil==2.8.2
 python-multipart==0.0.5
 pyyaml==6.0
 requests==2.27.1
+s3transfer==0.5.1
 setuptools==60.5.0
 six==1.16.0
 sniffio==1.2.0
