@@ -1,6 +1,7 @@
 import logging
 import os
 
+from api.models.file_info import FileInfo
 import boto3
 from botocore.exceptions import ClientError
 from fastapi import APIRouter, UploadFile
@@ -46,10 +47,16 @@ async def download(name: str):
         s3.get_object(Bucket=MINIO_BUCKET, Key=name)["Body"].iter_chunks(CHUNK_SIZE)
     )
 
+def convert(file) -> FileInfo:
+    return FileInfo(**file)
 
 @files_router.get("/list", name="files:list")
-async def list_objects():
-    return s3.list_objects(Bucket=MINIO_BUCKET)
+async def list_objects() -> list[FileInfo]:
+    objects = s3.list_objects(Bucket=MINIO_BUCKET)
+    if "Contents" in objects:
+        return list(map(convert, objects["Contents"]))
+    else:
+        return []
 
 
 @files_router.post("", name="files:create")

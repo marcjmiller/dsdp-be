@@ -2,6 +2,7 @@ import pytest
 from fastapi import UploadFile
 from api.routes.files import download, list_objects, create, delete
 from mock import MagicMock
+import logging
 
 BUCKET = "bucket"
 
@@ -9,14 +10,16 @@ BUCKET = "bucket"
 @pytest.mark.asyncio
 async def test_download(mocker):
     expected = "test"
-    mock = mocker.patch("api.routes.files.s3.get_object", MagicMock())
+    mock = mocker.patch("api.routes.files.s3.get_object")
     await download("test")
     mock.assert_called_with(Bucket=BUCKET, Key=expected)
 
 
 @pytest.mark.asyncio
 async def test_list_objects(mocker):
-    mock = mocker.patch("api.routes.files.s3.list_objects", MagicMock())
+    mock = mocker.patch("api.routes.files.s3.list_objects",MagicMock())
+    print(f"*************{mock.__dict__.keys()}")
+    #mock().return_value = {"Contents": []}
     await list_objects()
     mock.assert_called_with(Bucket=BUCKET)
 
