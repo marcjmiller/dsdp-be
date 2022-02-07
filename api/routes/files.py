@@ -1,11 +1,11 @@
 import logging
 import os
-
-from api.models.file_info import FileInfo
 import boto3
 from botocore.exceptions import ClientError
 from fastapi import APIRouter, UploadFile
 from starlette.responses import StreamingResponse
+
+from api.models.file_info import FileInfo
 
 files_router = APIRouter()
 
@@ -55,9 +55,7 @@ async def list_objects() -> list[FileInfo]:
     objects = s3.list_objects(Bucket=MINIO_BUCKET)
     if "Contents" in objects:
         return list(map(convert, objects["Contents"]))
-    else:
-        return []
-
+    return []
 
 @files_router.post("", name="files:create")
 async def create(file: UploadFile) -> bool:
