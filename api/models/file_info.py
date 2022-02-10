@@ -1,6 +1,9 @@
 from pydantic import BaseModel, Field
 
 
+def parse_s3_contents(file):
+    return FileInfo(**file)
+
 class FileInfo(BaseModel):
     """
     A class to represent a file's information.
@@ -12,11 +15,9 @@ class FileInfo(BaseModel):
     size : int
         size of the file
     """
-    Key: str = Field( alias='name')
-    Size: int = Field( alias='size')
+    Key: str = Field(alias='name')
+    Size: int = Field(alias='size')
 
-    def parse_s3_contents(self, file):
-        return FileInfo(**file)
     class Config:
         """
         Configuration class of FileDto
@@ -28,4 +29,4 @@ class FileInfo(BaseModel):
             populated by the fields name in addition
             to it's alias
         """
-        allow_population_by_field_name=True
+        allow_population_by_field_name = True

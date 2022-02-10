@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 from fastapi import APIRouter, UploadFile
 from starlette.responses import StreamingResponse
 
-from api.models.file_info import FileInfo
+from api.models.file_info import FileInfo, parse_s3_contents
 
 files_router = APIRouter()
 
@@ -52,7 +52,7 @@ async def download(name: str):
 @files_router.get("/list", name="files:list")
 async def list_objects() -> List[FileInfo]:
     objects = s3.list_objects(Bucket=MINIO_BUCKET)
-    return [FileInfo.parse_s3_contents(obj) for obj in objects.get("Contents", [])]
+    return [parse_s3_contents(obj) for obj in objects.get("Contents", [])]
 
 
 @files_router.post("", name="files:upload")
