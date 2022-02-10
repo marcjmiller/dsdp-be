@@ -1,6 +1,7 @@
 import logging
 import os
 import boto3
+from typing import List
 from botocore.exceptions import ClientError
 from fastapi import APIRouter, UploadFile
 from starlette.responses import StreamingResponse
@@ -41,24 +42,21 @@ if not bucket_exists(MINIO_BUCKET):
     s3.create_bucket(Bucket=MINIO_BUCKET)
 
 
-@files_router.get("", name="files:getFile")
+@files_router.get("", name="files:download")
 async def download(name: str):
     return StreamingResponse(
         s3.get_object(Bucket=MINIO_BUCKET, Key=name)["Body"].iter_chunks(CHUNK_SIZE)
     )
 
-def convert(file) -> FileInfo:
-    return FileInfo(**file)
 
 @files_router.get("/list", name="files:list")
-async def list_objects() -> list[FileInfo]:
+async def list_objects() -> List[FileInfo]:
     objects = s3.list_objects(Bucket=MINIO_BUCKET)
-    if "Contents" in objects:
-        return list(map(convert, objects["Contents"]))
-    return []
+    return [FileInfo.parse_s3_contents(obj) for obj in objects.get("Contents", [])]
 
-@files_router.post("", name="files:create")
-async def create(file: UploadFile) -> bool:
+
+@files_router.post("", name="files:upload")
+async def upload(file: UploadFile) -> bool:
     try:
         s3.upload_fileobj(Fileobj=file.file, Bucket=MINIO_BUCKET, Key=file.filename)
     except ClientError as error:

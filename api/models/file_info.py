@@ -14,6 +14,9 @@ class FileInfo(BaseModel):
     """
     Key: str = Field( alias='name')
     Size: int = Field( alias='size')
+
+    def parse_s3_contents(file):
+        return FileInfo(**file)
     class Config:
         """
         Configuration class of FileDto

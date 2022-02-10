@@ -10,11 +10,11 @@ class TestFilesRoutes:
         assert response.status_code != HTTP_404_NOT_FOUND
 
     def test_add_bucket_items(self, app: FastAPI, client: TestClient):
-        response = client.post(app.url_path_for("files:create"))
+        response = client.post(app.url_path_for("files:upload"))
         assert response.status_code != HTTP_404_NOT_FOUND
 
     def test_download_file(self, app: FastAPI, client: TestClient):
-        response = client.get(app.url_path_for("files:getFile"))
+        response = client.get(app.url_path_for("files:download"))
         assert response.status_code != HTTP_404_NOT_FOUND
 
     def test_delete_file(self, app: FastAPI, client: TestClient):
