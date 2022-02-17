@@ -10,7 +10,7 @@ from api.models.file_info import FileInfo, parse_s3_contents
 
 files_router = APIRouter()
 
-CHUNK_SIZE = 64 * 1024 * 1024
+CHUNK_SIZE = 8 * 1024 * 1024
 
 MINIO_BUCKET = os.getenv("MINIO_BUCKET_NAME", "bucket")
 MINIO_HOST = os.getenv("MINIO_HOST", "localhost")
