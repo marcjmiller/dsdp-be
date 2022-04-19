@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routes.api import router as api_router
 from Secweb.ContentSecurityPolicy import ContentSecurityPolicy
+from api.routes.api import router as api_router
 import logger  # pylint: disable=unused-import
 
 
@@ -17,7 +17,9 @@ def get_application() -> FastAPI:
         allow_headers=["*"],
     )
 
-    application.add_middleware(ContentSecurityPolicy, Option={'default-src': ["'self'"], 'connect-src': ["'self'"], 'form-action': ["'none'"]}, script_nonce=False, style_nonce=False)
+    application.add_middleware(
+        ContentSecurityPolicy, Option={'default-src': ["'self'"], 'connect-src': [
+            "'self'"], 'form-action': ["'none'"]}, script_nonce=False, style_nonce=False)
 
     application.include_router(api_router, prefix="/api")
     return application
