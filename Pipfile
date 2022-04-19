@@ -13,6 +13,7 @@ pyjwt = "*"
 pyyaml = "*"
 cryptography = "*"
 boto3 = "*"
+secweb = "*"
 
 [dev-packages]
 black = "*"

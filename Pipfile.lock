@@ -294,6 +294,14 @@
             "markers": "python_version >= '3.6'",
             "version": "==0.5.0"
         },
+        "secweb": {
+            "hashes": [
+                "sha256:7974c2e67221a88da19379841f088494c1dbddc3992e804e1c26fe745d1f5023",
+                "sha256:a1a3c06af1673fa4e1e3ef2ddd1c188361b929fcdb088cb7f6c49e923a395580"
+            ],
+            "index": "pypi",
+            "version": "==1.5.1"
+        },
         "setuptools": {
             "hashes": [
                 "sha256:b83cf328a4f6a987c95610e76b29a30778db05174eef71f771776c48f8f25d1b",
