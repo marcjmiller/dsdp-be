@@ -36,6 +36,7 @@ lint:
 
 format:
   LOCALLY
+  RUN pip install black
   RUN black .
 
 # unit-test:

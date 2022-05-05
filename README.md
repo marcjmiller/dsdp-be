@@ -16,7 +16,7 @@
 reloads and applies those changes.
   - This will only run the backend environment, giving you access to the API specifically. In order to run the frontend, change directory to the frontend repo and run `yarn start`. Look in the [frontend repo](https://code.il2.dso.mil/platform-one/products/gvsc/sec/dsdp/frontend) for more information. 
 ## Run tests
-- Run `earthly +all`
+- Run `earthly -P +all`
 
 ## Run Lint and Formatting
 - Run `earthly +lint`
