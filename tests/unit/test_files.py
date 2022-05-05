@@ -17,9 +17,7 @@ async def test_download(mocker):
 
 @pytest.mark.asyncio
 async def test_list_objects(mocker):
-    mock = mocker.patch("api.routes.files.s3.list_objects",MagicMock())
-    print(f"*************{mock.__dict__.keys()}")
-    #mock().return_value = {"Contents": []}
+    mock = mocker.patch("api.routes.files.s3.list_objects", MagicMock())
     await list_objects()
     mock.assert_called_with(Bucket=BUCKET)
 

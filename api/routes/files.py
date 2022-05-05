@@ -25,7 +25,7 @@ s3 = boto3.client(
     "s3",
     aws_access_key_id=MINIO_ACCESS_KEY,
     aws_secret_access_key=MINIO_SECRET_KEY,
-    endpoint_url=MINIO_PROTOCOL+"://" + MINIO_URL,
+    endpoint_url=MINIO_PROTOCOL + "://" + MINIO_URL,
 )
 
 

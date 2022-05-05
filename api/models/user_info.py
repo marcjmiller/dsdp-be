@@ -12,8 +12,10 @@ class UserInfo(BaseModel):
     is_admin : bool
         Whether the user is an admin or not
     """
+
     name: str
-    is_admin: bool = Field( alias='isAdmin')
+    is_admin: bool = Field(alias="isAdmin")
+
     class Config:
         """
         Configuration class of UserInfo
@@ -25,4 +27,5 @@ class UserInfo(BaseModel):
             populated by the fields name in addition
             to it's alias
         """
-        allow_population_by_field_name=True
+
+        allow_population_by_field_name = True
