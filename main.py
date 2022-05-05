@@ -18,8 +18,15 @@ def get_application() -> FastAPI:
     )
 
     application.add_middleware(
-        ContentSecurityPolicy, Option={'default-src': ["'self'"], 'connect-src': [
-            "'self'"], 'form-action': ["'none'"]}, script_nonce=False, style_nonce=False)
+        ContentSecurityPolicy,
+        Option={
+            "default-src": ["'self'"],
+            "connect-src": ["'self'"],
+            "form-action": ["'none'"],
+        },
+        script_nonce=False,
+        style_nonce=False,
+    )
 
     application.include_router(api_router, prefix="/api")
     return application

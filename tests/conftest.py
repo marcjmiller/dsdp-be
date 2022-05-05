@@ -3,6 +3,7 @@ import pytest_asyncio
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+
 @pytest_asyncio.fixture
 def app() -> FastAPI:
     from main import get_application

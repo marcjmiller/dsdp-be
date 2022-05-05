@@ -7,7 +7,11 @@ JWT_STUB = {
     "preferred_username": "user.name",
     "email": "useremail",
     "activecac": "",
-    "group-full": ["Products-Teams/Dsdp", "/Product-Teams/Dsdp/Admin", "/Platform One/gvsc/IL2/roles/admin"],
+    "group-full": [
+        "Products-Teams/Dsdp",
+        "/Product-Teams/Dsdp/Admin",
+        "/Platform One/gvsc/IL2/roles/admin",
+    ],
 }
 
 
