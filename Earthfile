@@ -36,8 +36,7 @@ lint:
 
 format:
   LOCALLY
-  RUN pip install black
-  RUN black .
+  RUN python3 -m black .
 
 # unit-test:
 #   FROM +dev-deps

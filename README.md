@@ -2,7 +2,8 @@
 - [Earthly](https://earthly.dev/get-earthly)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker-compose](https://docs.docker.com/compose/install/)
-
+- [pip](https://linuxize.com/post/how-to-install-pip-on-ubuntu-20.04/)
+- [black](https://github.com/psf/black)
 
 ## To get started with Development
 ### Requirements
