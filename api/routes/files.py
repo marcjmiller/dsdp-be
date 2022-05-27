@@ -1,3 +1,6 @@
+"""
+Files endpoints
+"""
 import logging
 import os
 from typing import List
@@ -30,6 +33,7 @@ s3 = boto3.client(
 
 
 def bucket_exists(bucket_name: str) -> bool:
+    """Check if the S3 Bucket exists"""
     try:
         s3.head_bucket(Bucket=bucket_name)
     except ClientError as error:
@@ -44,6 +48,7 @@ if not bucket_exists(MINIO_BUCKET):
 
 @files_router.get("", name="files:download")
 async def download(name: str):
+    """Downloads a file from a bucket and streams it to the client"""
     return StreamingResponse(
         s3.get_object(Bucket=MINIO_BUCKET, Key=name)["Body"].iter_chunks(CHUNK_SIZE)
     )
@@ -51,12 +56,14 @@ async def download(name: str):
 
 @files_router.get("/list", name="files:list")
 async def list_objects() -> List[FileInfo]:
+    """Lists all bucket objects"""
     objects = s3.list_objects(Bucket=MINIO_BUCKET)
     return [parse_s3_contents(obj) for obj in objects.get("Contents", [])]
 
 
 @files_router.post("", name="files:upload")
 async def upload(file: UploadFile) -> bool:
+    """Uploads a file to the S3 bucket"""
     try:
         s3.upload_fileobj(Fileobj=file.file, Bucket=MINIO_BUCKET, Key=file.filename)
     except ClientError as error:
@@ -67,6 +74,7 @@ async def upload(file: UploadFile) -> bool:
 
 @files_router.delete("", name="files:delete")
 async def delete(name: str):
+    """Deletes a file from a Bucket"""
     try:
         s3.delete_object(Bucket=MINIO_BUCKET, Key=name)
     except ClientError as error:

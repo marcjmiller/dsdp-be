@@ -1,3 +1,6 @@
+"""
+Auth endpoints
+"""
 import logging
 from typing import Optional
 from fastapi import APIRouter, Header
@@ -9,6 +12,7 @@ auth_router = APIRouter()
 
 @auth_router.get("/whoami", name="auth:getUserRoles")
 def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
+    """Takes in the auth header and returns a UserInfo object"""
     if authorization is None:
         return UserInfo(name="Nobody", is_admin=False)
 
@@ -17,7 +21,7 @@ def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
         decoded = decode(encoded_token, options={"verify_signature": False})
         user_info = UserInfo(
             **decoded,
-            is_admin=("/Platform One/gvsc/IL2/roles/admin" in decoded["group-full"])
+            is_admin=("/Platform One/gvsc/IL2/roles/admin" in decoded["group-full"]),
         )
     except Exception as exception:
         logging.info("Auth: %s\n Except: %s", authorization, exception)

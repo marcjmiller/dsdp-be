@@ -1,7 +1,13 @@
+"""
+File Info object and config
+"""
 from pydantic import BaseModel, Field
 
 
 def parse_s3_contents(file):
+    """
+    Parse s3 Contents
+    """
     return FileInfo(**file)
 
 

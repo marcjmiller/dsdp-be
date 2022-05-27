@@ -3,7 +3,8 @@
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker-compose](https://docs.docker.com/compose/install/)
 - [pip](https://linuxize.com/post/how-to-install-pip-on-ubuntu-20.04/)
-- [black](https://github.com/psf/black)
+- [pipx](https://pypa.github.io/pipx/installation/)
+- [poetry](https://python-poetry.org/docs/)
 
 ## To get started with Development
 ### Requirements

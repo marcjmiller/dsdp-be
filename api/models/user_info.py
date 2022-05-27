@@ -1,3 +1,6 @@
+"""
+User Info Object for collecting information from the Auth header keycloak JWT
+"""
 from pydantic import BaseModel, Field
 
 

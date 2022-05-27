@@ -1,5 +1,7 @@
-from api.routes.auth import who_am_i
+"""Tests for auth endpoints"""
 from mock import MagicMock
+
+from api.routes.auth import who_am_i
 from api.models.user_info import UserInfo
 
 JWT_STUB = {
@@ -16,6 +18,9 @@ JWT_STUB = {
 
 
 def test_auth(mocker):
+    """
+    Tests the whoami endpoint with the JWT STUB
+    """
     expected_user_obj = UserInfo(name="user name", is_admin=True)
     mock = mocker.patch("api.routes.auth.decode", MagicMock())
     mock.return_value = JWT_STUB

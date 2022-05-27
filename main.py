@@ -1,11 +1,17 @@
+"""
+Main Module
+"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from Secweb.ContentSecurityPolicy import ContentSecurityPolicy
 from api.routes.api import router as api_router
-import logger  # pylint: disable=unused-import
+from api.config import logger  # pylint: disable=unused-import
 
 
 def get_application() -> FastAPI:
+    """
+    DocString
+    """
     application = FastAPI()
     origins = ["*"]
 

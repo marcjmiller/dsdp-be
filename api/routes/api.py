@@ -1,3 +1,6 @@
+"""
+Router for the API
+"""
 from fastapi import APIRouter
 
 from .files import files_router
