@@ -1,16 +1,16 @@
 """
 Files endpoints
 """
-from asyncio.log import logger
 import logging
 import os
-from typing import List, Optional
+from typing import List
+
 import boto3
 from botocore.exceptions import ClientError
-from fastapi import APIRouter, UploadFile, Form, File
+from fastapi import APIRouter, File, UploadFile, Form
 from starlette.responses import StreamingResponse
 
-from api.models.file_info import FileInfo, parse_s3_contents, FileReleaseType
+from api.models.file_info import FileInfo, FileReleaseType, parse_s3_contents
 
 files_router = APIRouter()
 
@@ -74,18 +74,21 @@ async def list_objects() -> List[FileInfo]:
 
 
 @files_router.post("", name="files:upload")
-async def upload(files: List[UploadFile] = File(...)) -> bool:
+async def upload(
+    file: UploadFile = File(...), release_type: FileReleaseType = Form(None)
+):
     """Uploads a file to the S3 bucket"""
-    for file in files:
-        try:
-            s3.upload_fileobj(
-                Fileobj=file.file,
-                Bucket=MINIO_BUCKET,
-                Key=file.filename,
-                # ExtraArgs={"Metadata": {"release_type": getattr(release_type, "value", "")}}
-            )
-        except ClientError as error:
-            logging.error(error)
+    try:
+        s3.upload_fileobj(
+            Fileobj=file.file,
+            Bucket=MINIO_BUCKET,
+            Key=file.filename,
+            ExtraArgs={
+                "Metadata": {"release_type": getattr(release_type, "value", "")}
+            },
+        )
+    except ClientError as error:
+        logging.error(error)
 
 
 @files_router.delete("", name="files:delete")

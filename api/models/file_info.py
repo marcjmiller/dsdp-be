@@ -11,7 +11,6 @@ def parse_s3_contents(file):
     """
     return FileInfo(**file)
 
-
 class FileInfo(BaseModel):
     """
     A class to represent a file's information.
