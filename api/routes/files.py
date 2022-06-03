@@ -1,15 +1,16 @@
 """
 Files endpoints
 """
+from asyncio.log import logger
 import logging
 import os
-from typing import List
+from typing import List, Optional
 import boto3
 from botocore.exceptions import ClientError
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter, UploadFile, Form, File
 from starlette.responses import StreamingResponse
 
-from api.models.file_info import FileInfo, parse_s3_contents
+from api.models.file_info import FileInfo, parse_s3_contents, FileReleaseType
 
 files_router = APIRouter()
 
@@ -46,6 +47,14 @@ if not bucket_exists(MINIO_BUCKET):
     s3.create_bucket(Bucket=MINIO_BUCKET)
 
 
+def _get_and_attach_metadata(file) -> dict:
+    """Gets metadata about an object in s3 and attaches it to the file"""
+    return {
+        **file,
+        "metadata": s3.head_object(Bucket=MINIO_BUCKET, Key=file["Key"])["Metadata"],
+    }
+
+
 @files_router.get("", name="files:download")
 async def download(name: str):
     """Downloads a file from a bucket and streams it to the client"""
@@ -58,18 +67,25 @@ async def download(name: str):
 async def list_objects() -> List[FileInfo]:
     """Lists all bucket objects"""
     objects = s3.list_objects(Bucket=MINIO_BUCKET)
-    return [parse_s3_contents(obj) for obj in objects.get("Contents", [])]
+    objects_with_metadata = [
+        _get_and_attach_metadata(obj) for obj in objects.get("Contents", [])
+    ]
+    return [parse_s3_contents(obj) for obj in objects_with_metadata]
 
 
 @files_router.post("", name="files:upload")
-async def upload(file: UploadFile) -> bool:
+async def upload(files: List[UploadFile] = File(...)) -> bool:
     """Uploads a file to the S3 bucket"""
-    try:
-        s3.upload_fileobj(Fileobj=file.file, Bucket=MINIO_BUCKET, Key=file.filename)
-    except ClientError as error:
-        logging.error(error)
-        return False
-    return True
+    for file in files:
+        try:
+            s3.upload_fileobj(
+                Fileobj=file.file,
+                Bucket=MINIO_BUCKET,
+                Key=file.filename,
+                # ExtraArgs={"Metadata": {"release_type": getattr(release_type, "value", "")}}
+            )
+        except ClientError as error:
+            logging.error(error)
 
 
 @files_router.delete("", name="files:delete")
