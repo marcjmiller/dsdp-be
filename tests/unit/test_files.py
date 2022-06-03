@@ -3,6 +3,7 @@ import pytest
 from fastapi import UploadFile
 from mock import MagicMock
 from api.routes.files import download, list_objects, upload, delete
+from api.models.file_info import FileReleaseType
 from api.config import logger  # pylint: disable=unused-import
 
 BUCKET = "bucket"
@@ -31,7 +32,17 @@ async def test_upload_objects(mocker):
     expected = UploadFile(filename="test")
     mock = mocker.patch("api.routes.files.s3.upload_fileobj", MagicMock())
     await upload(expected)
-    mock.assert_called_with(Fileobj=expected.file, Bucket=BUCKET, Key=expected.filename)
+    mock.assert_called_with(Fileobj=expected.file, Bucket=BUCKET, Key=expected.filename, ExtraArgs={"Metadata": {"release_type" : ""}})
+
+
+@pytest.mark.asyncio
+async def test_upload_objects_with_metadata(mocker):
+    """Tests upload endpoint with release type metadata"""
+    expected = UploadFile(filename="test")
+    release_type = FileReleaseType.OUT_OF_CYCLE
+    mock = mocker.patch("api.routes.files.s3.upload_fileobj", MagicMock())
+    await upload(expected, release_type)
+    mock.assert_called_with(Fileobj=expected.file, Bucket=BUCKET, Key=expected.filename, ExtraArgs={"Metadata": {"release_type" : release_type.value}})
 
 
 @pytest.mark.asyncio

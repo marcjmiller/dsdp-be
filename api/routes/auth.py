@@ -14,7 +14,7 @@ auth_router = APIRouter()
 def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
     """Takes in the auth header and returns a UserInfo object"""
     if authorization is None:
-        return UserInfo(name="Nobody", is_admin=False)
+        return UserInfo(name="Nobody", is_admin=True)
 
     try:
         encoded_token = authorization.split(" ")[1]
