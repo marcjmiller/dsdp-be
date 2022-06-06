@@ -1,8 +1,8 @@
 """
 File Info object and config
 """
-from pydantic import BaseModel, Field
 from enum import Enum
+from pydantic import BaseModel, Field
 
 
 def parse_s3_contents(file):
@@ -51,3 +51,4 @@ class FileReleaseType(Enum):
     SAFETY_RELATED = "Safety Related"
     ENHANCEMENT_RELATED = "Enhancement Related"
     MANDATORY_UPDATE = "Mandatory Update"
+    
