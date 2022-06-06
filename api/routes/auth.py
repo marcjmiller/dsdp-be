@@ -24,6 +24,6 @@ def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
             is_admin=("/Platform One/gvsc/IL2/roles/admin" in decoded["group-full"]),
         )
     except Exception as exception:
-        logging.info("Auth: %s\n Except: %s", authorization, exception)
+        logging.info("Whoami: \n Except: %s", exception)
         raise exception
     return user_info
