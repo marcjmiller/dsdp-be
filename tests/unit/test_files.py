@@ -32,7 +32,12 @@ async def test_upload_objects(mocker):
     expected = UploadFile(filename="test")
     mock = mocker.patch("api.routes.files.s3.upload_fileobj", MagicMock())
     await upload(expected)
-    mock.assert_called_with(Fileobj=expected.file, Bucket=BUCKET, Key=expected.filename, ExtraArgs={"Metadata": {"release_type" : ""}})
+    mock.assert_called_with(
+        Fileobj=expected.file,
+        Bucket=BUCKET,
+        Key=expected.filename,
+        ExtraArgs={"Metadata": {"release_type": ""}},
+    )
 
 
 @pytest.mark.asyncio
@@ -42,7 +47,12 @@ async def test_upload_objects_with_metadata(mocker):
     release_type = FileReleaseType.OUT_OF_CYCLE
     mock = mocker.patch("api.routes.files.s3.upload_fileobj", MagicMock())
     await upload(expected, release_type)
-    mock.assert_called_with(Fileobj=expected.file, Bucket=BUCKET, Key=expected.filename, ExtraArgs={"Metadata": {"release_type" : release_type.value}})
+    mock.assert_called_with(
+        Fileobj=expected.file,
+        Bucket=BUCKET,
+        Key=expected.filename,
+        ExtraArgs={"Metadata": {"release_type": release_type.value}},
+    )
 
 
 @pytest.mark.asyncio

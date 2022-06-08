@@ -9,7 +9,8 @@ def parse_s3_contents(file):
     """
     Parse s3 Contents
     """
-    return FileInfo(**file)
+    return FileInfo(**file, isDownloading=False, isUploading=False)
+
 
 class FileInfo(BaseModel):
     """
@@ -28,6 +29,8 @@ class FileInfo(BaseModel):
     Key: str = Field(alias="name")
     Size: int = Field(alias="size")
     Metadata: dict = Field(alias="metadata")
+    isUploading: bool
+    isDownloading: bool
 
     class Config:
         """
@@ -43,12 +46,13 @@ class FileInfo(BaseModel):
 
         allow_population_by_field_name = True
 
+
 class FileReleaseType(Enum):
     """
     An enum class to represent a file's possible release type.
     """
+
     OUT_OF_CYCLE = "Out of Cycle"
     SAFETY_RELATED = "Safety Related"
     ENHANCEMENT_RELATED = "Enhancement Related"
     MANDATORY_UPDATE = "Mandatory Update"
-    
