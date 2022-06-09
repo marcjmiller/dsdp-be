@@ -1,16 +1,16 @@
 """
 Auth endpoints
 """
-import logging
 from typing import Optional
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Header, HTTPException
 from jwt import decode
-from api.models.user_info import UserInfo
+from jwt.exceptions import DecodeError
+from app.models.user_info import UserInfo
 
-auth_router = APIRouter()
+router = APIRouter()
 
 
-@auth_router.get("/whoami", name="auth:getUserRoles")
+@router.get("/whoami", name="auth:whoami")
 def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
     """Takes in the auth header and returns a UserInfo object"""
     if authorization is None:
@@ -23,7 +23,6 @@ def who_am_i(authorization: Optional[str] = Header(None)) -> UserInfo:
             **decoded,
             is_admin=("/Platform One/gvsc/IL2/roles/admin" in decoded["group-full"]),
         )
-    except Exception as exception:
-        logging.info("Whoami: \n Except: %s", exception)
-        raise exception
+    except DecodeError:
+        raise HTTPException(status_code=500, detail="Not a valid token")
     return user_info
