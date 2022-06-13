@@ -31,6 +31,8 @@ def test_upload(app: FastAPI, client: TestClient):
         "metadata": {"release_type": "Out of Cycle"},
         "name": "hello.txt",
         "size": 0,
+        "isDownloading": False,
+        "isUploading": False,
     }
 
 
