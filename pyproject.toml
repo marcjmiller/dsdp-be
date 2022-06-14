@@ -38,7 +38,7 @@ addopts = "--cov --cov-config=pyproject.toml --cov-report=term-missing"
 omit = ["tests/*",".cache/python-packages/*"]
 
 [tool.pylint.master]
-disable = ["C0415", "E0401"]
+disable = ["C0415", "E0401", "F0010"]
 extension-pkg-whitelist = ["pydantic"]
 
 [tool.pylint.design]
