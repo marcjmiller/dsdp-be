@@ -6,7 +6,7 @@ import jwt
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK
 
 fake_token = jwt.encode(
-    {"name": "ClintIsACat", "group-full": "/Platform One/gvsc/IL2/roles/admin"},
+    {"name": "ClintIsACat", "group-full": "/Platform One/gvsc/IL2/roles/admin", "preferred_username": "nobody.ctr"},
     "superSecret",
 )
 
@@ -18,7 +18,7 @@ def test_whoami(app: FastAPI, client: TestClient):
         headers={"Authorization": f"Bearer {fake_token}"},
     )
     assert response.status_code == HTTP_200_OK
-    assert response.json() == {"isAdmin": True, "name": "ClintIsACat"}
+    assert response.json() == {"isAdmin": True, "name": "ClintIsACat", "preferred_username": "nobody.ctr"}
 
 
 def test_whoami_with_bad_token(app: FastAPI, client: TestClient):

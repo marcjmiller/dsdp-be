@@ -14,10 +14,13 @@ class UserInfo(BaseModel):
         name of the user
     is_admin : bool
         Whether the user is an admin or not
+    preferred_username: str
+        unique username of the user
     """
 
     name: str
     is_admin: bool = Field(alias="isAdmin")
+    preferred_username: str
 
     class Config:
         """
