@@ -6,7 +6,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     DEVELOPMENT: Optional[boolean]
-    MINIO_BUCKET: Optional[str]
+    MINIO_BUCKET_NAME: Optional[str]
     MINIO_HOST: Optional[str]
     MINIO_PORT: Optional[int]
     MINIO_PROTOCOL: Optional[str]
@@ -21,8 +21,8 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings():
     settings = Settings()
-    if not settings.MINIO_BUCKET:
-        settings.MINIO_BUCKET = "bucket"
+    if not settings.MINIO_BUCKET_NAME:
+        settings.MINIO_BUCKET_NAME = "bucket"
     if not settings.MINIO_HOST:
         settings.MINIO_HOST = "localhost"
     if not settings.MINIO_PORT:

@@ -26,7 +26,7 @@ def __get_and_attach_metadata(
     """Gets metadata about an object in s3 and attaches it to the file"""
     return {
         **file,
-        "metadata": s3.head_object(Bucket=settings.MINIO_BUCKET, Key=file["Key"])[
+        "metadata": s3.head_object(Bucket=settings.MINIO_BUCKET_NAME, Key=file["Key"])[
             "Metadata"
         ],
     }
@@ -38,7 +38,7 @@ async def download(name: str, s3=Depends(get_s3_client)):
     Downloads a file
     """
     return StreamingResponse(
-        s3.get_object(Bucket=settings.MINIO_BUCKET, Key=name)["Body"].iter_chunks(
+        s3.get_object(Bucket=settings.MINIO_BUCKET_NAME, Key=name)["Body"].iter_chunks(
             CHUNK_SIZE
         )
     )
@@ -49,7 +49,7 @@ async def list_objects(s3=Depends(get_s3_client)) -> List[FileInfo]:
     """
     Lists all bucket objects
     """
-    objects = s3.list_objects(Bucket=settings.MINIO_BUCKET)
+    objects = s3.list_objects(Bucket=settings.MINIO_BUCKET_NAME)
     objects_with_metadata = [
         __get_and_attach_metadata(obj, s3) for obj in objects.get("Contents", [])
     ]
@@ -67,7 +67,7 @@ async def upload(
     try:
         s3.upload_fileobj(
             Fileobj=file.file,
-            Bucket=settings.MINIO_BUCKET,
+            Bucket=settings.MINIO_BUCKET_NAME,
             Key=file.filename,
             ExtraArgs={"Metadata": {"release_type": release_value}},
         )
@@ -89,7 +89,7 @@ async def delete(
     Deletes a file from a Bucket
     """
     try:
-        s3.delete_object(Bucket=settings.MINIO_BUCKET, Key=name)
+        s3.delete_object(Bucket=settings.MINIO_BUCKET_NAME, Key=name)
     except ClientError as error:
         logging.error(error)
         return False
