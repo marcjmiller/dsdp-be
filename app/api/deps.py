@@ -7,6 +7,7 @@ settings = get_settings()
 
 
 def get_s3_client() -> Generator:
+    print(f"temp url log*** {settings.MINIO_ENDPOINT_URL}")
     client = boto3.client(
         "s3",
         aws_access_key_id=settings.MINIO_ACCESS_KEY,

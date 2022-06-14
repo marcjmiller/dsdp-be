@@ -15,7 +15,8 @@ class Settings(BaseSettings):
     MINIO_SECRET_KEY: Optional[str]
     MINIO_URL: Optional[str]
     MINIO_ENDPOINT_URL: Optional[str]
-
+    class Config:
+        case_sensitive = True
 
 @lru_cache
 def get_settings():
@@ -34,5 +35,6 @@ def get_settings():
         settings.MINIO_SECRET_KEY = "minio123"
     if not settings.MINIO_URL:
         settings.MINIO_URL = f"{settings.MINIO_HOST}:{settings.MINIO_PORT}"
-    settings.MINIO_ENDPOINT_URL = f"{settings.MINIO_PROTOCOL}://{settings.MINIO_URL}"
+    if not settings.MINIO_ENDPOINT_URL:
+        settings.MINIO_ENDPOINT_URL=f"{settings.MINIO_PROTOCOL}://{settings.MINIO_URL}"
     return settings
