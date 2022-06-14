@@ -7,6 +7,7 @@ from botocore.exceptions import ClientError
 from starlette.status import HTTP_201_CREATED, HTTP_500_INTERNAL_SERVER_ERROR
 
 from app.api.deps import get_s3_client
+from app.models.file_info import FileReleaseType
 
 test_file = {"file": open("./app/tests/api/endpoints/hello.txt", "rb")}
 
@@ -15,7 +16,6 @@ async def fake1_boto_client():
     class mock_client:
         def upload_fileobj(*args, **kwargs):
             return {}
-
     return mock_client
 
 
@@ -24,11 +24,11 @@ def test_upload(app: FastAPI, client: TestClient):
     response = client.post(
         app.url_path_for("files:upload"),
         files=test_file,
-        data={"release_type": "Out of Cycle"},
+        data={"release_type": FileReleaseType.OUT_OF_CYCLE.value},
     )
     assert response.status_code == HTTP_201_CREATED
     assert response.json() == {
-        "metadata": {"release_type": "Out of Cycle"},
+        "metadata": {"release_type": FileReleaseType.OUT_OF_CYCLE.value},
         "name": "hello.txt",
         "size": 0,
         "isDownloading": False,
@@ -50,6 +50,6 @@ def test_failed_upload(app: fastapi, client: TestClient):
     response = client.post(
         app.url_path_for("files:upload"),
         files=test_file,
-        data={"response_type": "Out of Cycle"},
+        data={"response_type": FileReleaseType.OUT_OF_CYCLE.value},
     )
     assert response.status_code == HTTP_500_INTERNAL_SERVER_ERROR
