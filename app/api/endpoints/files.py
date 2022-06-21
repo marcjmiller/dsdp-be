@@ -49,7 +49,7 @@ async def list_objects(s3=Depends(get_s3_client)) -> List[FileInfo]:
     """
     Lists all bucket objects
     """
-    objects = s3.list_objects(Bucket=settings.MINIO_BUCKET_NAME)
+    objects = s3.list_objects(Bucket=settings.MINIO_BUCKET_NAME, Prefix="files")
     objects_with_metadata = [
         __get_and_attach_metadata(obj, s3) for obj in objects.get("Contents", [])
     ]
@@ -68,7 +68,7 @@ async def upload(
         s3.upload_fileobj(
             Fileobj=file.file,
             Bucket=settings.MINIO_BUCKET_NAME,
-            Key=file.filename,
+            Key="files/" + file.filename,
             ExtraArgs={"Metadata": {"release_type": release_value}},
         )
         return FileInfo(
