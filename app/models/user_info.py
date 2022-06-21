@@ -20,7 +20,7 @@ class UserInfo(BaseModel):
 
     name: str
     is_admin: bool = Field(alias="isAdmin")
-    preferred_username: str
+    preferred_username: str = Field(alias="preferredUsername")
 
     class Config:
         """
@@ -35,3 +35,15 @@ class UserInfo(BaseModel):
         """
 
         allow_population_by_field_name = True
+    
+class AdminInfo(BaseModel):
+    """
+    A class to represent a user's identity information.
+    ...
+    Attributes
+    ----------
+    username : str
+        username of the user
+    """
+
+    username: str
