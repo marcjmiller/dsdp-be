@@ -16,8 +16,8 @@ settings = get_settings()
 router = APIRouter()
 
 
-def __parse_admins(admin): 
-    return admin.get("Key").strip("admins/")
+def __parse_admins(admin):
+    return admin.get("Key")[7::]
 
 
 def __retrieve_admins(s3):
